@@ -9,39 +9,56 @@ struct facas
     double valor;
     char descricao[2000];
 };
-int ids=0,i=0;
+int ids=0,i=1;
 struct facas v[1001];
 struct facas aux;
 int verificaID(int n)
 {
     for(int j=0;j<i;j++)
     {
-        if(v[i].id==n)return 1;
+        if(v[j].id==n)return 1;
     }
     return 0;
+}
+int salvar()
+{
+    int f=0;
+    FILE *pf=fopen("produtos.ifcomp","wb");
+    if(fwrite(&v,sizeof(struct facas),i,pf))f=1;
+    fclose(pf);
+    return f;
+}
+void carregar()
+{
+    FILE *fp = fopen("produtos.ifcomp","rb");
+    int f=0;
+    ids=0;
+    while(!feof(fp))
+    {
+        if(feof(fp))break;
+        fread(&aux, sizeof (struct facas),1,fp);
+        if(aux.id==0)continue;
+        v[ids].id=aux.id;
+        v[ids].quantidade = aux.quantidade;
+        v[ids].valor = aux.valor;
+        cout << aux.id;
+        strcpy(v[ids].descricao, aux.descricao);
+        ids++,i++;
+    }
+    fclose(fp);
 }
 int main()
 {
     int n=1;
-     FILE *fp = fopen("produtos.ifcomp","rb");
-            while(!feof(fp))
-            {
-                fread(&aux, sizeof (struct facas),1,fp);
-                if(feof(fp))break;
-                v[i].id=aux.id;
-                v[i].quantidade = aux.quantidade;
-                v[i].valor = aux.valor;
-                cout << aux.id;
-                strcpy(v[i].descricao, aux.descricao);
-                i++;
-                ids=v[i].id;
-            }
-            fclose(fp);
-            ids++;
+    carregar();
     while(n)
     {
+        // printf("      ______________________________ ______________________\n");
+        // printf("    .'                              | (_)     (_)    (_)   \\n");
+        // printf("  .'                                |  __________________   }\n");
+        // printf(".'_.............................____|_(                  )_/\n");
         scanf("%d",&n);
-
+         
         if(n==1)
         {
             printf(" ██████╗ █████╗ ██████╗  █████╗ ███████╗████████╗██████╗  ██████╗ \n");
@@ -49,17 +66,13 @@ int main()
             printf("██║     ███████║██║  ██║███████║███████╗   ██║   ██████╔╝██║   ██║\n");
             printf("██║     ██╔══██║██║  ██║██╔══██║╚════██║   ██║   ██╔══██╗██║   ██║\n");
             printf("╚██████╗██║  ██║██████╔╝██║  ██║███████║   ██║   ██║  ██║╚██████╔╝\n");
-            printf(" ╚═════╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ \n");                                                    
-            v[i].id=i;
-            scanf("%d",&v[i].quantidade);
-            scanf("%lf",&v[i].valor);
-            scanf(" %[^\n]",v[i].descricao);
-            FILE *pf=fopen("produtos.ifcomp","wb");
-            if(fwrite(&v,sizeof(struct facas),i+1,pf))printf("Cadastrado com sucesso!\n");
-            fclose(pf);
-            i++;
-            
-           
+            printf(" ╚═════╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ \n");
+            v[ids].id=i;
+            scanf("%d",&v[ids].quantidade);
+            scanf("%lf",&v[ids].valor);
+            scanf(" %[^\n]",v[ids].descricao);
+            i++,ids++;
+            (salvar())? printf("Cadastrado com sucesso!\n") : printf("Falha no cadastro!\n");
         }
         if(n==2)
         {
@@ -70,18 +83,14 @@ int main()
             printf("██║  ██║███████╗██║   ███████╗██║  ██║██║  ██║██║  ██║\n");
             printf("╚═╝  ╚═╝╚══════╝╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝\n");
             int a;scanf("%d",&a);
-            FILE *alt = fopen("produtos.ifcomp","wb+");
             if(verificaID(a))
             {
                 scanf("%d",&v[a].quantidade);
                 scanf("%lf",&v[a].valor);
                 scanf(" %[^\n]",v[a].descricao);
-                if(fwrite(&v,sizeof(struct facas),i+1,alt))printf("Alterado com sucesso!\n");
-
-                fclose(alt);
-<<<<<<< HEAD
+                (salvar())? printf("Alterado com sucesso!\n") : printf("Falha na alteração!\n");
             }
-            else printf("ID nao encontrado!\n");              
+            else printf("ID nao encontrado!\n");
         }
         if(n==3)
         {
@@ -92,41 +101,42 @@ int main()
             printf("██╔══╝   ██╔██╗ ██║     ██║     ██║   ██║██║██╔══██╗\n");
             printf("███████╗██╔╝ ██╗╚██████╗███████╗╚██████╔╝██║██║  ██║\n");
             printf("╚══════╝╚═╝  ╚═╝ ╚═════╝╚══════╝ ╚═════╝ ╚═╝╚═╝  ╚═╝\n");
-        }
-        if(n==4)
-        {
-                                                                 
-            printf(" ██████╗ ██████╗ ███╗   ██╗███████╗██╗   ██╗██╗  ████████╗ █████╗ ██████╗\n");
-            printf("██╔════╝██╔═══██╗████╗  ██║██╔════╝██║   ██║██║  ╚══██╔══╝██╔══██╗██╔══██╗\n");
-            printf("██║     ██║   ██║██╔██╗ ██║███████╗██║   ██║██║     ██║   ███████║██████╔╝\n");
-            printf("██║     ██║   ██║██║╚██╗██║╚════██║██║   ██║██║     ██║   ██╔══██║██╔══██╗\n");
-            printf("╚██████╗╚██████╔╝██║ ╚████║███████║╚██████╔╝███████╗██║   ██║  ██║██║  ██║\n");
-            printf(" ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚══════╝╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝\n");
-            int a;scanf("%d",&a);
-            if(verificaID(a))
-            {
-                printf("%d\n",v[i].id);
-                printf("%d\n",v[i].quantidade);
-                printf("%lf\n",v[i].valor);
-                printf("%s\n",v[i].descricao);
-            }
-=======
-            }
-            else printf("ID nao encontrado!\n");              
-        }
-        if(n==3)
-        {
 
-            printf("███████╗██╗  ██╗ ██████╗██╗     ██╗   ██╗██╗██████╗ \n");
-            printf("██╔════╝╚██╗██╔╝██╔════╝██║     ██║   ██║██║██╔══██╗\n");
-            printf("█████╗   ╚███╔╝ ██║     ██║     ██║   ██║██║██████╔╝\n");
-            printf("██╔══╝   ██╔██╗ ██║     ██║     ██║   ██║██║██╔══██╗\n");
-            printf("███████╗██╔╝ ██╗╚██████╗███████╗╚██████╔╝██║██║  ██║\n");
-            printf("╚══════╝╚═╝  ╚═╝ ╚═════╝╚══════╝ ╚═════╝ ╚═╝╚═╝  ╚═╝\n");
+            int exc;scanf("%d",&exc);
+            FILE *abrir = fopen("produtos.ifcomp","rb");
+            if(verificaID(exc))
+            {
+                ids=0,i=0;
+                while(!feof(abrir))
+                {
+                    if(feof(abrir))break;
+                    fread(&aux, sizeof (struct facas),1,abrir);
+                    if(aux.id!=0 && aux.id!=exc)
+                    {
+                        printf("Executou legal!\n");
+                        v[ids].id=aux.id;
+                        v[ids].quantidade = aux.quantidade;
+                        v[ids].valor = aux.valor;
+                        cout << aux.id << "------" << endl;
+                        strcpy(v[ids].descricao, aux.descricao);
+                        ids++,i++;
+                    }
+                    
+                }
+                for(int k=0;k<=i;k++)
+                {
+                    cout << v[k].id << endl;
+                }
+                //salvar();               
+            }
+            else printf("ID nao encontrado!\n");
+            
+            fclose(abrir);
+            
         }
         if(n==4)
         {
-                                                                 
+            //ARRUMAR
             printf(" ██████╗ ██████╗ ███╗   ██╗███████╗██╗   ██╗██╗  ████████╗ █████╗ ██████╗\n");
             printf("██╔════╝██╔═══██╗████╗  ██║██╔════╝██║   ██║██║  ╚══██╔══╝██╔══██╗██╔══██╗\n");
             printf("██║     ██║   ██║██╔██╗ ██║███████╗██║   ██║██║     ██║   ███████║██████╔╝\n");
@@ -136,13 +146,12 @@ int main()
             int a;scanf("%d",&a);
             if(verificaID(a))
             {
-                printf("%d\n",v[i].id);
-                printf("%d\n",v[i].quantidade);
-                printf("%lf\n",v[i].valor);
-                printf("%s\n",v[i].descricao);
+                printf("%d\n",v[a].id);
+                printf("%d\n",v[a].quantidade);
+                printf("%lf\n",v[a].valor);
+                printf("%s\n",v[a].descricao);
             }
->>>>>>> 437471b856f7af8f923ea45259a43d871edb288c
-            else printf("ID nao encontrado!\n"); 
+            else printf("ID nao encontrado!\n");
         }
         if(n==5)
         {
@@ -151,7 +160,7 @@ int main()
             printf("██████╔╝█████╗  ██║     ███████║   ██║   ██║   ██║██████╔╝██║██║   ██║\n");
             printf("██╔══██╗██╔══╝  ██║     ██╔══██║   ██║   ██║   ██║██╔══██╗██║██║   ██║\n");
             printf("██║  ██║███████╗███████╗██║  ██║   ██║   ╚██████╔╝██║  ██║██║╚██████╔╝\n");
-            printf("╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝ \n");                                                                      
+            printf("╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝ \n");
         }
     }
     return 0;
