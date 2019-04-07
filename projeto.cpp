@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-
+#include <locale.h>
 using namespace std;
 
 struct facas
@@ -49,14 +49,19 @@ void carregar()
 }
 int main()
 {
+    setlocale(LC_ALL, "Portuguese");
     int n=1;
     carregar();
     while(n)
     {
-        // printf("      ______________________________ ______________________\n");
-        // printf("    .'                              | (_)     (_)    (_)   \\n");
-        // printf("  .'                                |  __________________   }\n");
-        // printf(".'_.............................____|_(                  )_/\n");
+        printf("--------------------------------------------------------------------------------\n");
+        printf("| 1) Cadastro de facas.                                                        |\n");
+        printf("| 2) Alteração de dados.                                                       |\n");
+        printf("| 3) Exclusão de dados.                                                        |\n");
+        printf("| 4) Consultar dados.                                                          |\n");
+        printf("| 0) Sair do programa.                                                         |\n");
+        printf("--------------------------------------------------------------------------------\n");
+
         scanf("%d",&n);
          
         if(n==1)
@@ -104,6 +109,7 @@ int main()
 
             int exc;scanf("%d",&exc);
             FILE *abrir = fopen("produtos.ifcomp","rb");
+            struct facas vexc[1001];
             if(verificaID(exc))
             {
                 ids=0,i=0;
@@ -111,23 +117,22 @@ int main()
                 {
                     if(feof(abrir))break;
                     fread(&aux, sizeof (struct facas),1,abrir);
-                    if(aux.id!=0 && aux.id!=exc)
-                    {
-                        printf("Executou legal!\n");
-                        v[ids].id=aux.id;
-                        v[ids].quantidade = aux.quantidade;
-                        v[ids].valor = aux.valor;
-                        cout << aux.id << "------" << endl;
-                        strcpy(v[ids].descricao, aux.descricao);
-                        ids++,i++;
-                    }
-                    
+                    if(aux.id==exc || aux.id==0)continue;
+                    vexc[ids].id = aux.id;
+                    vexc[ids].quantidade = aux.quantidade;
+                    vexc[ids].valor = aux.valor;
+                    strcpy(vexc[ids].descricao,aux.descricao); 
+                    ids++,i;
                 }
-                for(int k=0;k<=i;k++)
+                for(int k=0;k<ids;k++)
                 {
-                    cout << v[k].id << endl;
+                    cout << vexc[k].id << endl;
+                    v[k]=vexc[k];
                 }
-                //salvar();               
+                FILE *exx = fopen("produtos.ifcomp", "wb");
+                fwrite(&vexc,sizeof(struct facas),ids,exx);
+                fclose(exx);
+                carregar();               
             }
             else printf("ID nao encontrado!\n");
             
@@ -136,7 +141,6 @@ int main()
         }
         if(n==4)
         {
-            //ARRUMAR
             printf(" ██████╗ ██████╗ ███╗   ██╗███████╗██╗   ██╗██╗  ████████╗ █████╗ ██████╗\n");
             printf("██╔════╝██╔═══██╗████╗  ██║██╔════╝██║   ██║██║  ╚══██╔══╝██╔══██╗██╔══██╗\n");
             printf("██║     ██║   ██║██╔██╗ ██║███████╗██║   ██║██║     ██║   ███████║██████╔╝\n");
@@ -146,10 +150,15 @@ int main()
             int a;scanf("%d",&a);
             if(verificaID(a))
             {
-                printf("%d\n",v[a].id);
-                printf("%d\n",v[a].quantidade);
-                printf("%lf\n",v[a].valor);
-                printf("%s\n",v[a].descricao);
+                int hehe;
+                for(int j=0;j<i;j++)
+                {
+                    if(v[j].id==n)hehe=j;
+                }
+                printf("%d\n",v[hehe].id);
+                printf("%d\n",v[hehe].quantidade);
+                printf("%lf\n",v[hehe].valor);
+                printf("%s\n",v[hehe].descricao);
             }
             else printf("ID nao encontrado!\n");
         }
