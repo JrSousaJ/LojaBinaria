@@ -42,26 +42,36 @@ int salvar()
 }
 void carregar()
 {
-    FILE *fp = fopen("produtos.ifcomp","rb");
-    int f=0;
-    ids=0;
-    set<int>conjid;
-    while(!feof(fp))
+    FILE *fp;
+    if(fopen("produtos.ifcomp","rb")==0)
     {
-        if(feof(fp))break;
-        fread(&aux, sizeof (struct facas),1,fp);
-        if(aux.id==0 || conjid.find(aux.id)!=conjid.end())continue;
-        conjid.insert(aux.id);
-        v[ids].id=aux.id;
-        v[ids].quantidade = aux.quantidade;
-        v[ids].valor = aux.valor;
-        strcpy(v[ids].descricao, aux.descricao);
-        strcpy(v[ids].nome, aux.nome);
-
-        ids++;
-        i = aux.id+1;
+        return ;
     }
-    fclose(fp);
+    else
+    {
+        fp = fopen("produtos.ifcomp","rb");
+        int f=0;
+        ids=0;
+        set<int>conjid;
+        while(!feof(fp))
+        {
+            if(feof(fp))break;
+            fread(&aux, sizeof (struct facas),1,fp);
+            if(aux.id==0 || conjid.find(aux.id)!=conjid.end())continue;
+            conjid.insert(aux.id);
+            v[ids].id=aux.id;
+            v[ids].quantidade = aux.quantidade;
+            v[ids].valor = aux.valor;
+            strcpy(v[ids].descricao, aux.descricao);
+            strcpy(v[ids].nome, aux.nome);
+
+            ids++;
+            i = aux.id+1;
+        }
+        fclose(fp);
+    }
+    
+    
 }
 int main()
 {
@@ -157,7 +167,7 @@ int main()
             if(verificaID(exc))
             {
                 int hehe;
-                printf("Excluindo...\n", );
+                printf("Excluindo...\n");
                 for(int j=0;j<i;j++)
                 {
                     if(v[j].id==exc)hehe=j;
