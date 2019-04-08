@@ -1,3 +1,7 @@
+/*
+Criado por Jairo                                    
+    3° Período - Ciência da Computação.
+*/
 #include<bits/stdc++.h>
 #include <locale.h>
 //#include<unistd.h> //linux
