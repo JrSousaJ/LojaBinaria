@@ -211,6 +211,13 @@ int main()
             printf("--------------------------------------------------------------------------------\n");
             printf("Gerar relatório\n");
 
+            FILE *rela = fopen("rel.txt", "r");
+            fscanf(rela, "%d",&rel);
+            rel++;
+            fclose(rela);
+            FILE *qtdr = fopen("rel.txt", "w");
+            fprintf(rela, "%d",rel);
+            fclose(qtdr);
             string xua;
             stringstream help;
             help << rel++;
@@ -223,22 +230,22 @@ int main()
             Sleep(1000); //Windows
             //usleep(1000000); //linux
             printf("Relatório gerado: %s\n",filename);
-            FILE *rel = fopen(filename, "wb");
-            fprintf(rel, "--------------------------------------------------------------------------------\n");
-            fprintf(rel, "|                            Cutelaria AK 47                                   |\n");
-            fprintf(rel, "|                  A cutelaria perfeita para você!                             |\n");
-            fprintf(rel, "--------------------------------------------------------------------------------\n");
+            FILE *rels = fopen(filename, "wb");
+            fprintf(rels, "--------------------------------------------------------------------------------\n");
+            fprintf(rels, "|                            Cutelaria AK 47                                   |\n");
+            fprintf(rels, "|                  A cutelaria perfeita para você!                             |\n");
+            fprintf(rels, "--------------------------------------------------------------------------------\n");
             for(int k=0;k<ids;k++)
             {
-                fprintf(rel, "--------------------------------------------------------------------------------\n");
-                fprintf(rel, "| Código: %d                                                                   |\n",v[k].id);
-                fprintf(rel, "| Nome: %s |\n",v[k].nome );
-                fprintf(rel, "| Estoque: %d                                                                  |\n",v[k].quantidade );
-                fprintf(rel, "| Valor: R$ %.2lf                                                              |\n",v[k].valor );
-                fprintf(rel, "| Descrição: %s |\n",v[k].descricao );
-                fprintf(rel, "--------------------------------------------------------------------------------\n");
+                fprintf(rels, "--------------------------------------------------------------------------------\n");
+                fprintf(rels, "| Código: %d                                                                   |\n",v[k].id);
+                fprintf(rels, "| Nome: %s |\n",v[k].nome );
+                fprintf(rels, "| Estoque: %d                                                                  |\n",v[k].quantidade );
+                fprintf(rels, "| Valor: R$ %.2lf                                                              |\n",v[k].valor );
+                fprintf(rels, "| Descrição: %s |\n",v[k].descricao );
+                fprintf(rels, "--------------------------------------------------------------------------------\n");
             }
-            fclose(rel);
+            fclose(rels);
         }
         if(!n)
         {
